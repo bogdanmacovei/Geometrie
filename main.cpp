@@ -1,6 +1,7 @@
 #include <bits/stdc++.h>
 #include <graphics.h>
-#include <functional>
+
+const int NR = 5;
 
 class Point
 {
@@ -14,7 +15,7 @@ public:
         ~Point ();
         friend std::ostream& operator << (std::ostream&, const Point&);
         float dist (const Point&);
-        friend float operator * (const Point&, const Point&); // produs scalar, presupunem ca A si B sunt vectori de pozitie
+        friend float operator * (const Point&, const Point&); // produs scalar, presupunem ca A si B sunt vectori
         void drawPoint (); // 2D
         void drawLine (const Point&);
 };
@@ -102,11 +103,11 @@ void Point :: drawPoint ()
         return;
 
     auto newX = [] (int _arg) -> decltype(_arg) {
-        return getmaxx()/2 + 10*_arg;
+        return getmaxx() / 2 + NR * _arg;
     };
 
     auto newY = [] (int _arg) -> decltype(_arg) {
-        return getmaxy()/2 - 10*_arg;
+        return getmaxy() / 2 - NR * _arg;
     };
 
     circle (newX(_comp[0]), newY(_comp[1]), 2);
@@ -119,11 +120,11 @@ void Point :: drawLine (const Point& localP)
         return;
 
     auto newX = [] (int _arg) -> decltype(_arg) {
-        return getmaxx()/2 + 10*_arg;
+        return getmaxx() / 2 + NR * _arg;
     };
 
     auto newY = [] (int _arg) -> decltype(_arg) {
-        return getmaxy()/2 - 10*_arg;
+        return getmaxy() / 2 - NR * _arg;
     };
 
     line (newX(_comp[0]), newY(_comp[1]), newX(localP._comp[0]), newY(localP._comp[1]));
@@ -132,11 +133,11 @@ void Point :: drawLine (const Point& localP)
 void drawFunction (std::function<int(int)> f, bool val, ...)
 {
     auto newX = [] (int _arg) -> decltype(_arg) {
-        return getmaxx()/2 + 10*_arg;
+        return getmaxx() / 2 + NR * _arg;
     };
 
     auto newY = [] (int _arg) -> decltype(_arg) {
-        return getmaxy()/2 - 10*_arg;
+        return getmaxy() / 2 - NR * _arg;
     };
 
     va_list lp;
@@ -200,15 +201,24 @@ int main ()
     Point B ("B", 2, 5, 0);
     B.drawPoint();
 
+    Point C ("C", 2, 0, -5);
+    C.drawPoint();
+
+    Point D ("D", 2, -5, 0);
+    D.drawPoint();
+
     A.drawLine (B);
+    B.drawLine (C);
+    C.drawLine (D);
+    D.drawLine (A);
 
     drawFunction ([](int x) -> decltype(x) {
-        return x*x + 2*x + 1;
+        return x*x;
     }, false);
 
-//    drawFunction ([](int x) -> decltype(x) {
-//        return 2*x*x*x;
-//    }, false);
+    drawFunction ([](int x) -> decltype(x) {
+        return -x*x;
+    }, false);
 
     stopGraphic ();
     return 0;
